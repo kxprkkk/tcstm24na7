@@ -1,0 +1,1901 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="TRENING">
+  <meta name="theme-color" content="#0B132B">
+  <title>TRENING</title>
+  <link id="apple-icon" rel="apple-touch-icon">
+  <link id="app-manifest" rel="manifest">
+
+  <style>
+    :root {
+      --bg-main: #F2F2F7;
+      --bg-card: #FFFFFF;
+      --bg-secondary: #E5E5EA;
+      --text-main: #1C1C1E;
+      --text-muted: #8E8E93;
+      --border-color: rgba(60, 60, 67, 0.12);
+      --navy: #0B132B;
+      --accent: #007AFF;
+      --accent-soft: rgba(0, 122, 255, 0.12);
+      --green: #34C759;
+      --green-soft: rgba(52, 199, 89, 0.14);
+      --orange: #FF9500;
+      --orange-soft: rgba(255, 149, 0, 0.14);
+      --purple: #AF52DE;
+      --purple-soft: rgba(175, 82, 222, 0.14);
+      --red: #FF3B30;
+      --red-soft: rgba(255, 59, 48, 0.14);
+      --tab-bg: rgba(255, 255, 255, 0.85);
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    }
+
+    [data-theme="dark"] {
+      --bg-main: #000000;
+      --bg-card: #1C1C1E;
+      --bg-secondary: #2C2C2E;
+      --text-main: #F2F2F7;
+      --text-muted: #8E8E93;
+      --border-color: rgba(255, 255, 255, 0.1);
+      --accent: #0A84FF;
+      --accent-soft: rgba(10, 132, 255, 0.18);
+      --green: #30D158;
+      --green-soft: rgba(48, 209, 88, 0.18);
+      --orange: #FF9F0A;
+      --orange-soft: rgba(255, 159, 10, 0.18);
+      --purple: #BF5AF2;
+      --purple-soft: rgba(191, 90, 242, 0.18);
+      --red: #FF453A;
+      --red-soft: rgba(255, 69, 58, 0.18);
+      --tab-bg: rgba(28, 28, 30, 0.88);
+      --shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      padding-bottom: calc(90px + env(safe-area-inset-bottom));
+      padding-top: env(safe-area-inset-top);
+      min-height: 100vh;
+      overflow-x: hidden;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    /* HEADER */
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px 12px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 11px;
+      background: #0B132B;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: -0.5px;
+      border: 1px solid rgba(255,255,255,0.15);
+      box-shadow: 0 2px 8px rgba(11, 19, 43, 0.4);
+    }
+
+    .brand-title h1 {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-title p {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .icon-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    /* CONTAINER & VIEWS */
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    .view {
+      display: none;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* BENTO GRID */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .bento-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .span-2 {
+      grid-column: span 2;
+    }
+
+    .card-label {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-title {
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+      margin-bottom: 6px;
+    }
+
+    /* BUTTONS & INPUTS */
+    .btn {
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 11px 16px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: transform 0.1s ease, opacity 0.15s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #FFFFFF;
+    }
+
+    .btn-success {
+      background: var(--green);
+      color: #FFFFFF;
+    }
+
+    .btn-secondary {
+      background: var(--bg-secondary);
+      color: var(--text-main);
+    }
+
+    .btn-danger {
+      background: var(--red-soft);
+      color: var(--red);
+    }
+
+    .btn-sm {
+      padding: 7px 12px;
+      font-size: 13px;
+      border-radius: var(--radius-sm);
+    }
+
+    .btn-block {
+      width: 100%;
+    }
+
+    input, select {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 15px;
+      width: 100%;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--accent);
+    }
+
+    /* WEEK STRIP */
+    .week-strip {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .week-day {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 8px 4px;
+      text-align: center;
+      border: 1px solid transparent;
+    }
+
+    .week-day.is-today {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .week-day .d-name {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .week-day .d-num {
+      font-size: 15px;
+      font-weight: 700;
+      margin: 3px 0;
+    }
+
+    .dots {
+      display: flex;
+      justify-content: center;
+      gap: 3px;
+      min-height: 7px;
+    }
+
+    .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .dot-workout { background: var(--accent); }
+    .dot-stretch { background: var(--green); }
+    .dot-other { background: var(--orange); }
+    .dot-rest { background: var(--text-muted); opacity: 0.4; }
+
+    /* ACTIVE WORKOUT BANNER & TIMER */
+    .workout-timer-bar {
+      background: var(--navy);
+      color: #FFFFFF;
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      margin-bottom: 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .timer-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .timer-Val {
+      font-size: 28px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.5px;
+    }
+
+    .rest-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      align-items: center;
+    }
+
+    .rest-chip {
+      background: rgba(255,255,255,0.12);
+      color: #FFF;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .rest-chip:active {
+      background: var(--accent);
+    }
+
+    /* SETS TABLE */
+    .exercise-block {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      margin-bottom: 12px;
+      border: 1px solid var(--border-color);
+    }
+
+    .set-row {
+      display: grid;
+      grid-template-columns: 34px 1fr 1fr 44px 34px;
+      gap: 8px;
+      align-items: center;
+      margin-top: 8px;
+    }
+
+    .set-row.done input {
+      background: var(--green-soft);
+      border-color: var(--green);
+    }
+
+    .set-num {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    .check-btn {
+      height: 38px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-secondary);
+      color: var(--text-main);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .check-btn.checked {
+      background: var(--green);
+      color: #FFF;
+      border-color: var(--green);
+    }
+
+    /* CALENDAR */
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+    }
+
+    .cal-header {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 4px 0;
+    }
+
+    .cal-cell {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      min-height: 54px;
+      padding: 6px 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+
+    .cal-cell.selected {
+      border-color: var(--accent);
+    }
+
+    .cal-cell.outside {
+      opacity: 0.25;
+      pointer-events: none;
+    }
+
+    .cal-cell .c-num {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .cal-badge {
+      font-size: 9px;
+      padding: 2px 5px;
+      border-radius: 5px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    /* BADGES */
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .badge-workout { background: var(--accent-soft); color: var(--accent); }
+    .badge-stretch { background: var(--green-soft); color: var(--green); }
+    .badge-other { background: var(--orange-soft); color: var(--orange); }
+    .badge-rest { background: var(--bg-secondary); color: var(--text-muted); }
+
+    /* LIST ITEMS */
+    .list-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      margin-bottom: 8px;
+      gap: 10px;
+    }
+
+    /* BOTTOM TAB BAR */
+    .tab-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--tab-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+      z-index: 100;
+    }
+
+    .tab-item {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      flex: 1;
+    }
+
+    .tab-item svg {
+      width: 22px;
+      height: 22px;
+      fill: currentColor;
+    }
+
+    .tab-item.active {
+      color: var(--accent);
+    }
+
+    .row-flex {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    @media (max-width: 500px) {
+      .bento-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .mobile-full {
+        grid-column: span 2;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-logo">Tr.</div>
+      <div class="brand-title">
+        <h1>TRENING</h1>
+        <p id="header-date"></p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" onclick="toggleTheme()" title="Zmień motyw" id="theme-btn">☀️</button>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ==================== ZAKŁADKA 1: KONTROLA (HOME) ==================== -->
+    <section id="view-kontrola" class="view active">
+      <div class="bento-grid">
+
+        <!-- Kafelek: Plan na dziś -->
+        <div class="bento-card span-2">
+          <div class="card-label">
+            <span>ZAŁOŻENIA NA DZIŚ</span>
+            <span id="today-status-badge" class="badge badge-rest">Sprawdzanie...</span>
+          </div>
+          <div class="card-title" id="today-plan-title">Plan dnia</div>
+          <p id="today-plan-sub" style="font-size: 13px; color: var(--text-muted); margin-bottom: 14px;"></p>
+          <div class="row-flex" style="flex-wrap: wrap;">
+            <button class="btn btn-primary" onclick="switchTab('trening')">Rozpocznij trening</button>
+            <button class="btn btn-success" onclick="quickLogStretch()">+ Zalicz Rozciąganie</button>
+            <button class="btn btn-secondary" onclick="openQuickActivityModal()">+ Inna aktywność</button>
+          </div>
+        </div>
+
+        <!-- Kafelek: Pasek tygodnia -->
+        <div class="bento-card span-2">
+          <div class="card-label">
+            <span>TEN TYDZIEŃ</span>
+            <span style="font-size: 11px; font-weight: 500;">🔵 Trening &nbsp;🟢 Rozciąganie &nbsp;🟠 Inne</span>
+          </div>
+          <div class="week-strip" id="week-strip"></div>
+        </div>
+
+        <!-- Kafelek: Rozciąganie Follow-Along -->
+        <div class="bento-card mobile-full">
+          <div>
+            <div class="card-label">ROZCIĄGANIE</div>
+            <div class="card-title" id="stretch-status-text">Nieodhaczone</div>
+            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Rutyny Follow-Along i szybki zapis</p>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:6px;">
+            <button class="btn btn-success btn-block" onclick="quickLogStretch()">Odhacz rozciąganie dziś</button>
+            <button class="btn btn-secondary btn-sm btn-block" onclick="switchTab('trening'); document.getElementById('stretch-section').scrollIntoView({behavior:'smooth'});">Otwórz linki Follow-Along</button>
+          </div>
+        </div>
+
+        <!-- Kafelek: Szybka Waga i Statystyki -->
+        <div class="bento-card mobile-full">
+          <div>
+            <div class="card-label">SYLWETKA I WAGA</div>
+            <div class="card-title" id="dashboard-weight">-- kg</div>
+            <p id="dashboard-bmi" style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Aktualny pomiar</p>
+          </div>
+          <div class="row-flex">
+            <input type="number" step="0.1" id="quick-weight-input" placeholder="Waga (kg)">
+            <button class="btn btn-primary" onclick="saveQuickWeight()">Zapisz</button>
+          </div>
+        </div>
+
+        <!-- Kafelek: Dzisiejsze wykonane aktywności -->
+        <div class="bento-card span-2">
+          <div class="card-label">ZROBIONE DZISIAJ (USUNIĘCIE NATYCHMIAST CZYŚCI KALENDARZ)</div>
+          <div id="today-logs-list"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== ZAKŁADKA 2: TRENING ==================== -->
+    <section id="view-trening" class="view">
+
+      <!-- Pasek Aktywnego Treningu i Timera (oparty o znaczniki czasu) -->
+      <div class="workout-timer-bar" id="active-workout-box" style="display: none;">
+        <div class="timer-grid">
+          <div>
+            <div style="font-size: 11px; opacity: 0.75; font-weight: 700;">CZAS TRENINGU (START: <span id="aw-start-label">--:--</span>)</div>
+            <div class="timer-Val" id="aw-elapsed">00:00:00</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 11px; opacity: 0.75; font-weight: 700;">PRZERWA MIĘDZY SERIAMI</div>
+            <div class="timer-Val" id="aw-rest-timer" style="color: #5AC8FA;">00:00</div>
+          </div>
+        </div>
+
+        <div class="rest-controls">
+          <span style="font-size: 12px; opacity: 0.85; font-weight: 600;">Start przerwy:</span>
+          <button class="rest-chip" onclick="startRestTimer(60)">60s</button>
+          <button class="rest-chip" onclick="startRestTimer(90)">90s</button>
+          <button class="rest-chip" onclick="startRestTimer(120)">120s</button>
+          <button class="rest-chip" onclick="startRestTimer(180)">180s</button>
+          <div style="display:flex; gap:4px; align-items:center; margin-left:auto;">
+            <input type="number" id="custom-rest-sec" placeholder="Sek." style="width: 68px; padding: 5px 8px; font-size: 12px; background: rgba(255,255,255,0.15); color: #fff; border:none;">
+            <button class="rest-chip" onclick="startCustomRest()">Ustaw</button>
+            <button class="rest-chip" style="background: rgba(255,69,58,0.35);" onclick="stopRestTimer()">Stop</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel wyboru lub trwającego treningu -->
+      <div class="bento-card" style="margin-bottom: 14px;" id="workout-selector-card">
+        <div class="card-label">TRENING SIŁOWY</div>
+        <div class="card-title">Wybierz plan lub edytuj szablony</div>
+        <div id="plans-list" style="margin: 10px 0;"></div>
+
+        <div style="border-top: 1px solid var(--border-color); padding-top: 12px; margin-top: 8px;">
+          <div class="card-label">STWÓRZ / EDYTUJ PLAN TRENINGOWY</div>
+          <input type="hidden" id="edit-plan-id">
+          <input type="text" id="new-plan-name" placeholder="Nazwa planu (np. Góra A / Push / FBW)" style="margin-bottom: 8px;">
+          <input type="text" id="new-plan-exercises" placeholder="Ćwiczenia po przecinku (np. Wyciskanie 4s, Wiosłowanie 4s, Biceps 3s)" style="margin-bottom: 8px;">
+          <div class="row-flex">
+            <button class="btn btn-primary btn-sm" onclick="saveWorkoutPlan()">Zapisz plan</button>
+            <button class="btn btn-secondary btn-sm" onclick="resetPlanForm()">Wyczyść</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Aktywny arkusz serii i powtórzeń -->
+      <div id="active-workout-sheet" style="display: none; margin-bottom: 16px;">
+        <div class="row-flex" style="justify-content: space-between; margin-bottom: 10px;">
+          <h2 id="aw-title" style="font-size: 20px; font-weight: 800;">Trening</h2>
+          <div class="row-flex">
+            <button class="btn btn-danger btn-sm" onclick="cancelActiveWorkout()">Anuluj</button>
+            <button class="btn btn-success btn-sm" onclick="finishActiveWorkout()">Zakończ i Zapisz</button>
+          </div>
+        </div>
+        <div id="aw-exercises-container"></div>
+        <div class="row-flex" style="margin-top: 10px;">
+          <input type="text" id="aw-add-ex-name" placeholder="Dodaj dodatkowe ćwiczenie w trakcie...">
+          <button class="btn btn-secondary" onclick="addExerciseToActive()">+ Ćwiczenie</button>
+        </div>
+      </div>
+
+      <!-- Sekcja: Rozciąganie (Follow-Along) -->
+      <div class="bento-card" id="stretch-section" style="margin-bottom: 14px;">
+        <div class="card-label">
+          <span>ROZCIĄGANIE — RUTYNY FOLLOW-ALONG</span>
+          <button class="btn btn-success btn-sm" onclick="quickLogStretch()">+ Zalicz bez linku</button>
+        </div>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">
+          Wklej linki do swoich rutyn (np. Tone and Tighten). Kliknięcie „Otwórz i Zalicz” uruchamia wideo i od razu odhacza rozciąganie w dzisiejszym kalendarzu.
+        </p>
+        <div id="stretch-links-list" style="margin-bottom: 12px;"></div>
+        <div class="row-flex" style="flex-wrap: wrap;">
+          <input type="text" id="stretch-title-in" placeholder="Nazwa (np. Tone & Tighten - Lower Back 10 min)" style="flex: 1; min-width: 180px;">
+          <input type="url" id="stretch-url-in" placeholder="Link YouTube (https://...)" style="flex: 1; min-width: 180px;">
+          <button class="btn btn-primary btn-sm" onclick="addStretchRoutine()">Dodaj rutynę</button>
+        </div>
+      </div>
+
+      <!-- Sekcja: Spacer, Cardio i Własna Aktywność -->
+      <div class="bento-card" id="other-activity-section" style="margin-bottom: 14px;">
+        <div class="card-label">SPACER / CARDIO / WŁASNA AKTYWNOŚĆ</div>
+        <div class="bento-grid" style="margin-bottom: 10px;">
+          <div>
+            <label style="font-size: 12px; color: var(--text-muted);">Rodzaj aktywności</label>
+            <select id="oa-type"></select>
+          </div>
+          <div>
+            <label style="font-size: 12px; color: var(--text-muted);">Data</label>
+            <input type="date" id="oa-date">
+          </div>
+          <div>
+            <label style="font-size: 12px; color: var(--text-muted);">Dystans (km - opcjonalnie)</label>
+            <input type="number" step="0.1" id="oa-dist" placeholder="np. 6.0">
+          </div>
+          <div>
+            <label style="font-size: 12px; color: var(--text-muted);">Czas trwania (min - opcjonalnie)</label>
+            <input type="number" id="oa-dur" placeholder="np. 50">
+          </div>
+        </div>
+        <input type="text" id="oa-note" placeholder="Notatka / szczegóły (opcjonalnie)" style="margin-bottom: 10px;">
+        <button class="btn btn-primary btn-block" onclick="saveOtherActivity()">Zapisz aktywność w dzienniku</button>
+
+        <div style="border-top: 1px solid var(--border-color); margin-top: 12px; padding-top: 10px;">
+          <div class="row-flex">
+            <input type="text" id="custom-cat-in" placeholder="Dodaj własną kategorię do listy (np. Basen, Rower, Góry)">
+            <button class="btn btn-secondary btn-sm" onclick="addCustomCategory()">+ Kategoria</button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== ZAKŁADKA 3: KALENDARZ I PLANER ==================== -->
+    <section id="view-kalendarz" class="view">
+
+      <!-- Kalendarz Miesiąca -->
+      <div class="bento-card" style="margin-bottom: 14px;">
+        <div class="row-flex" style="justify-content: space-between; margin-bottom: 12px;">
+          <button class="btn btn-secondary btn-sm" onclick="changeMonth(-1)">◀ Poprzedni</button>
+          <div id="cal-month-title" style="font-size: 17px; font-weight: 800; text-transform: capitalize;">Miesiąc</div>
+          <button class="btn btn-secondary btn-sm" onclick="changeMonth(1)">Następny ▶</button>
+        </div>
+
+        <div class="cal-grid" id="cal-headers">
+          <div class="cal-header">Pn</div><div class="cal-header">Wt</div><div class="cal-header">Śr</div>
+          <div class="cal-header">Cz</div><div class="cal-header">Pt</div><div class="cal-header">Sb</div><div class="cal-header">Nd</div>
+        </div>
+        <div class="cal-grid" id="cal-days"></div>
+
+        <!-- Podgląd wybranego dnia -->
+        <div style="border-top: 1px solid var(--border-color); margin-top: 14px; padding-top: 12px;">
+          <div class="row-flex" style="justify-content: space-between; margin-bottom: 8px;">
+            <div class="card-label" style="margin:0;">SZCZEGÓŁY DNIA: <span id="selected-date-label" style="color: var(--text-main);"></span></div>
+            <div class="row-flex">
+              <button class="btn btn-secondary btn-sm" onclick="logStretchOnSelectedDate()">+ Rozciąganie w tym dniu</button>
+            </div>
+          </div>
+          <div id="selected-date-logs"></div>
+        </div>
+      </div>
+
+      <!-- Planer Tygodnia + Powiadomienia Web Notification API -->
+      <div class="bento-card" style="margin-bottom: 14px;">
+        <div class="card-label">
+          <span>PLANER TYGODNIA I POWIADOMIENIA</span>
+          <button class="btn btn-secondary btn-sm" onclick="requestNotifPermission()" id="notif-perm-btn">Włącz powiadomienia</button>
+        </div>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">
+          Ustal założenia na każdy dzień tygodnia oraz opcjonalną godzinę przypomnienia (Web Notification API).
+        </p>
+        <div id="weekly-planner-rows"></div>
+        <button class="btn btn-primary btn-block" style="margin-top: 10px;" onclick="saveWeeklyPlanner()">Zapisz Planer Tygodnia</button>
+      </div>
+
+      <!-- Ustawienie daty startu aplikacji (ochrona przed wiecznym Rest Day) -->
+      <div class="bento-card">
+        <div class="card-label">MECHANIKA REST DAY (OD KIEDY LICZYĆ)</div>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">
+          Dni bez aktywności są oznaczane jako „Rest Day” wyłącznie od poniższej daty startu aż do dzisiaj. Wcześniejsze lata pozostają puste.
+        </p>
+        <div class="row-flex">
+          <input type="date" id="app-start-date-in">
+          <button class="btn btn-secondary" onclick="updateAppStartDate()">Zapisz datę startu</button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== ZAKŁADKA 4: PROFIL I BAZA DANYCH ==================== -->
+    <section id="view-profil" class="view">
+
+      <!-- Eksport CSV / Excel -->
+      <div class="bento-card" style="margin-bottom: 14px;">
+        <div class="card-label">BAZA DANYCH — EKSPORT CSV / EXCEL</div>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">
+          Pobierz płaską tabelę ze wszystkimi wykonanymi treningami (każda seria, ciężar, objętość, godzina rozpoczęcia i zakończenia) gotową do analizy w Excelu.
+        </p>
+        <div class="bento-grid" style="margin-bottom: 8px;">
+          <button class="btn btn-primary btn-block mobile-full" onclick="exportWorkoutsCSV()">📥 Pobierz Treningi i Aktywności (.CSV)</button>
+          <button class="btn btn-secondary btn-block mobile-full" onclick="exportMeasurementsCSV()">📥 Pobierz Pomiary Ciała (.CSV)</button>
+        </div>
+        <div class="row-flex" style="margin-top: 8px;">
+          <button class="btn btn-secondary btn-sm" onclick="exportFullJSON()">Kopia zapasowa (.JSON)</button>
+          <label class="btn btn-secondary btn-sm" style="cursor: pointer;">
+            Wczytaj kopię (.JSON)
+            <input type="file" accept=".json" style="display: none;" onchange="importFullJSON(event)">
+          </label>
+        </div>
+      </div>
+
+      <!-- Dane podstawowe i Wymiary ciała -->
+      <div class="bento-card" style="margin-bottom: 14px;">
+        <div class="card-label">STATYSTYKI OSOBISTE I WYMIARY</div>
+        <div class="row-flex" style="margin-bottom: 14px;">
+          <div style="flex:1;">
+            <label style="font-size: 12px; color: var(--text-muted);">Wzrost (cm)</label>
+            <input type="number" id="prof-height" placeholder="np. 180" onchange="saveHeight()">
+          </div>
+          <div style="flex:1;">
+            <label style="font-size: 12px; color: var(--text-muted);">Data pomiaru</label>
+            <input type="date" id="meas-date">
+          </div>
+        </div>
+
+        <div class="bento-grid" style="margin-bottom: 12px;">
+          <div>
+            <label style="font-size: 12px; color: var(--text-muted);">Waga (kg)</label>
+            <input type="number" step="0.1" id="m-weight" placeholder="kg">
+          </div>
+          <div>
+            <label style="font-size: 12px; color: var(--text-muted);">Klatka piersiowa (cm)</label>
+            <input type="number" step="0.5" id="m-chest" placeholder="cm">
+          </div>
+          <div>
+            <label style="font-size: 12px; color: var(--text-muted);">Pas / Talia (cm)</label>
+            <input type="number" step="0.5" id="m-waist" placeholder="cm">
+          </div>
+          <div>
+            <label style="font-size: 12px; color: var(--text-muted);">Biceps (cm)</label>
+            <input type="number" step="0.5" id="m-bicep" placeholder="cm">
+          </div>
+          <div>
+            <label style="font-size: 12px; color: var(--text-muted);">Udo (cm)</label>
+            <input type="number" step="0.5" id="m-thigh" placeholder="cm">
+          </div>
+          <div>
+            <label style="font-size: 12px; color: var(--text-muted);">Łydka (cm)</label>
+            <input type="number" step="0.5" id="m-calf" placeholder="cm">
+          </div>
+        </div>
+        <button class="btn btn-primary btn-block" onclick="saveBodyMeasurement()">Zapisz pomiary z wybranym dniem</button>
+
+        <div style="border-top: 1px solid var(--border-color); margin-top: 14px; padding-top: 12px;">
+          <div class="card-label">HISTORIA POMIARÓW</div>
+          <div id="measurements-history-list"></div>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- DOLNY PASEK NAWIGACJI (iOS HUD) -->
+  <nav class="tab-bar">
+    <button class="tab-item active" onclick="switchTab('kontrola')" id="tab-kontrola">
+      <svg viewBox="0 0 24 24"><path d="M12 3L4 9v12h5v-7h6v7h5V9z"/></svg>
+      <span>Kontrola</span>
+    </button>
+    <button class="tab-item" onclick="switchTab('trening')" id="tab-trening">
+      <svg viewBox="0 0 24 24"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43L16.29 22l2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/></svg>
+      <span>Trening</span>
+    </button>
+    <button class="tab-item" onclick="switchTab('kalendarz')" id="tab-kalendarz">
+      <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+      <span>Kalendarz</span>
+    </button>
+    <button class="tab-item" onclick="switchTab('profil')" id="tab-profil">
+      <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+      <span>Profil</span>
+    </button>
+  </nav>
+
+  <script>
+    /* ================= 1. GENEROWANIE IKONY "Tr." I MANIFESTU PWA ================= */
+    function initPWAAssets() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 512;
+      canvas.height = 512;
+      const ctx = canvas.getContext('2d');
+
+      // Tło ciemnogranatowe #0B132B
+      ctx.fillStyle = '#0B132B';
+      ctx.fillRect(0, 0, 512, 512);
+
+      // Subtelny obrys wewnętrzny
+      ctx.strokeStyle = 'rgba(255,255,255,0.12)';
+      ctx.lineWidth = 12;
+      ctx.strokeRect(24, 24, 464, 464);
+
+      // Tekst "Tr." w stylu San Francisco
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = '800 240px -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('Tr.', 256, 268);
+
+      const iconUrl = canvas.toDataURL('image/png');
+      document.getElementById('apple-icon').href = iconUrl;
+
+      const manifest = {
+        name: "TRENING",
+        short_name: "TRENING",
+        start_url: ".",
+        display: "standalone",
+        background_color: "#0B132B",
+        theme_color: "#0B132B",
+        icons: [{ src: iconUrl, sizes: "512x512", type: "image/png" }]
+      };
+      const blob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
+      document.getElementById('app-manifest').href = URL.createObjectURL(blob);
+    }
+
+    /* ================= 2. BAZA DANYCH (SINGLE SOURCE OF TRUTH) ================= */
+    const STORAGE_KEY = 'TRENING_PWA_DB_V1';
+    const DAYS_PL = ['Niedziela', 'Poniedziałek', 'Wtorek', 'Środa', 'Czwartek', 'Piątek', 'Sobota'];
+    const DAYS_SHORT = ['Pn', 'Wt', 'Śr', 'Cz', 'Pt', 'Sb', 'Nd'];
+
+    function getTodayISO() {
+      const now = new Date();
+      const offset = now.getTimezoneOffset() * 60000;
+      return new Date(now - offset).toISOString().split('T')[0];
+    }
+
+    function getTimeHM(dateObj = new Date()) {
+      return dateObj.toTimeString().slice(0, 5);
+    }
+
+    const defaultState = {
+      theme: 'dark',
+      appStartDate: getTodayISO(),
+      height: 180,
+      customCategories: ['Spacer', 'Cardio', 'Góry / Trekking'],
+      plans: [
+        {
+          id: 'p1',
+          name: 'Trening A (Siła - Góra)',
+          exercises: [
+            { name: 'Wyciskanie sztangi / hantli', sets: 4 },
+            { name: 'Wiosłowanie w opadzie', sets: 4 },
+            { name: 'Wyciskanie żołnierskie (OHP)', sets: 3 },
+            { name: 'Uginanie ramion (Biceps)', sets: 3 }
+          ]
+        },
+        {
+          id: 'p2',
+          name: 'Trening B (Siła - Dół i Korpus)',
+          exercises: [
+            { name: 'Przysiad / Suwnica', sets: 4 },
+            { name: 'Martwy ciąg na prostych nogach', sets: 4 },
+            { name: 'Wspięcia na palce (Łydki)', sets: 4 },
+            { name: 'Plank / Brzuch', sets: 3 }
+          ]
+        }
+      ],
+      stretchRoutines: [
+        { id: 's1', title: 'Tone and Tighten — Full Body Mobility', url: 'https://www.youtube.com/@ToneandTighten' }
+      ],
+      weeklyPlanner: {
+        1: { plan: 'Trening Siłowy', time: '17:30' },
+        2: { plan: 'Rozciąganie + Spacer', time: '19:00' },
+        3: { plan: 'Trening Siłowy', time: '17:30' },
+        4: { plan: 'Rest Day / Regeneracja', time: '' },
+        5: { plan: 'Trening Siłowy', time: '17:30' },
+        6: { plan: 'Spacer / Aktywność', time: '11:00' },
+        0: { plan: 'Rest Day + Rozciąganie', time: '19:00' }
+      },
+      logs: [], // Wszystkie aktywności: { id, date, startTime, endTime, durationMin, type, name, exercises:[], distanceKm, note }
+      measurements: [], // { id, date, weight, chest, waist, bicep, thigh, calf }
+      activeWorkout: null, // Przechowuje aktywny trening wraz z timestampem startu
+      restTimerEndTime: null, // Timestamp końca przerwy (odporny na minimalizację)
+      notifiedTodayKey: ''
+    };
+
+    let state = loadState();
+    let calYear = new Date().getFullYear();
+    let calMonth = new Date().getMonth();
+    let selectedCalDate = getTodayISO();
+
+    function loadState() {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return JSON.parse(JSON.stringify(defaultState));
+      try {
+        return Object.assign(JSON.parse(JSON.stringify(defaultState)), JSON.parse(raw));
+      } catch (e) {
+        return JSON.parse(JSON.stringify(defaultState));
+      }
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      renderAll();
+    }
+
+    /* ================= 3. MOTYW JASNY / CIEMNY I NAWIGACJA ================= */
+    function applyTheme() {
+      document.documentElement.setAttribute('data-theme', state.theme);
+      document.getElementById('theme-btn').textContent = state.theme === 'dark' ? '☀️' : '🌙';
+    }
+
+    function toggleTheme() {
+      state.theme = state.theme === 'dark' ? 'light' : 'dark';
+      applyTheme();
+      saveState();
+    }
+
+    function switchTab(tabName) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+      document.getElementById('view-' + tabName).classList.add('active');
+      document.getElementById('tab-' + tabName).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openQuickActivityModal() {
+      switchTab('trening');
+      document.getElementById('other-activity-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    /* ================= 4. TIMERY OPARTE O ZNACZNIKI CZASU (REAL-TIME) ================= */
+    function playBeep() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, ctx.currentTime);
+        gain.gain.setValueAtTime(0.25, ctx.currentTime);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.35);
+      } catch (e) {}
+    }
+
+    function startRestTimer(seconds) {
+      state.restTimerEndTime = Date.now() + (seconds * 1000);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      updateTimersUI();
+    }
+
+    function startCustomRest() {
+      const val = parseInt(document.getElementById('custom-rest-sec').value, 10);
+      if (val && val > 0) startRestTimer(val);
+    }
+
+    function stopRestTimer() {
+      state.restTimerEndTime = null;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      updateTimersUI();
+    }
+
+    function updateTimersUI() {
+      const box = document.getElementById('active-workout-box');
+      if (!state.activeWorkout) {
+        box.style.display = 'none';
+        return;
+      }
+      box.style.display = 'block';
+      document.getElementById('aw-start-label').textContent = state.activeWorkout.startTimeHM;
+
+      // Wyliczanie czasu treningu na podstawie różnicy czasu rzeczywistego (działa po zminimalizowaniu)
+      const elapsedSec = Math.max(0, Math.floor((Date.now() - state.activeWorkout.startTimestamp) / 1000));
+      const hrs = String(Math.floor(elapsedSec / 3600)).padStart(2, '0');
+      const mins = String(Math.floor((elapsedSec % 3600) / 60)).padStart(2, '0');
+      const secs = String(elapsedSec % 60).padStart(2, '0');
+      document.getElementById('aw-elapsed').textContent = `${hrs}:${mins}:${secs}`;
+
+      // Wyliczanie czasu przerwy
+      const restEl = document.getElementById('aw-rest-timer');
+      if (state.restTimerEndTime) {
+        const remSec = Math.ceil((state.restTimerEndTime - Date.now()) / 1000);
+        if (remSec <= 0) {
+          state.restTimerEndTime = null;
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+          restEl.textContent = 'GOTOWE!';
+          playBeep();
+          sendLocalNotification('Koniec przerwy!', 'Czas na kolejną serię w aplikacji TRENING.');
+        } else {
+          const rM = String(Math.floor(remSec / 60)).padStart(2, '0');
+          const rS = String(remSec % 60).padStart(2, '0');
+          restEl.textContent = `${rM}:${rS}`;
+        }
+      } else {
+        restEl.textContent = '00:00';
+      }
+    }
+
+    setInterval(() => {
+      updateTimersUI();
+      checkScheduledNotification();
+    }, 1000);
+
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) updateTimersUI();
+    });
+
+    /* ================= 5. POWIADOMIENIA (WEB NOTIFICATION API) ================= */
+    function requestNotifPermission() {
+      if (!('Notification' in window)) {
+        alert('Twoja przeglądarka nie wspiera Web Notification API (na iOS dodaj najpierw aplikację do Ekranu Początkowego).');
+        return;
+      }
+      Notification.requestPermission().then(perm => {
+        updateNotifButton();
+        if (perm === 'granted') {
+          sendLocalNotification('TRENING — Powiadomienia aktywne', 'Będziesz otrzymywać przypomnienia zgodnie z Planerem Tygodnia.');
+        }
+      });
+    }
+
+    function updateNotifButton() {
+      const btn = document.getElementById('notif-perm-btn');
+      if (!('Notification' in window)) {
+        btn.textContent = 'Brak wsparcia API';
+        return;
+      }
+      if (Notification.permission === 'granted') {
+        btn.textContent = 'Powiadomienia: Aktywne ✓';
+        btn.className = 'btn btn-success btn-sm';
+      } else {
+        btn.textContent = 'Włącz powiadomienia';
+        btn.className = 'btn btn-secondary btn-sm';
+      }
+    }
+
+    function sendLocalNotification(title, body) {
+      if ('Notification' in window && Notification.permission === 'granted') {
+        try {
+          new Notification(title, { body });
+        } catch (e) {}
+      }
+    }
+
+    function checkScheduledNotification() {
+      const now = new Date();
+      const dayIdx = now.getDay();
+      const plannerDay = state.weeklyPlanner[dayIdx];
+      if (!plannerDay || !plannerDay.time) return;
+
+      const currentHM = getTimeHM(now);
+      const todayISO = getTodayISO();
+      const notifKey = `${todayISO}_${plannerDay.time}`;
+
+      if (currentHM === plannerDay.time && state.notifiedTodayKey !== notifKey) {
+        state.notifiedTodayKey = notifKey;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        sendLocalNotification('Zaplanowana aktywność: ' + plannerDay.plan, 'Zgodnie z Twoim Planerem Tygodnia czas na dzisiejszą sesję!');
+      }
+    }
+
+    /* ================= 6. TRENING SIŁOWY I HISTORIA CIĘŻARÓW ================= */
+    function getLastExercisePerformance(exName) {
+      for (let i = state.logs.length - 1; i >= 0; i--) {
+        const log = state.logs[i];
+        if (log.type === 'workout' && log.exercises) {
+          const found = log.exercises.find(e => e.name.toLowerCase() === exName.toLowerCase());
+          if (found && found.sets && found.sets.length > 0) {
+            return found.sets;
+          }
+        }
+      }
+      return null;
+    }
+
+    function startWorkoutFromPlan(planId) {
+      const plan = state.plans.find(p => p.id === planId);
+      if (!plan) return;
+
+      const now = new Date();
+      state.activeWorkout = {
+        planName: plan.name,
+        date: getTodayISO(),
+        startTimestamp: Date.now(),
+        startTimeHM: getTimeHM(now),
+        exercises: plan.exercises.map(ex => {
+          const lastSets = getLastExercisePerformance(ex.name);
+          const setsArr = [];
+          for (let i = 0; i < (ex.sets || 3); i++) {
+            const prev = lastSets && lastSets[i] ? lastSets[i] : (lastSets ? lastSets[lastSets.length - 1] : null);
+            setsArr.push({
+              weight: prev ? prev.weight : '',
+              reps: prev ? prev.reps : '',
+              done: false,
+              hint: prev ? `Ostatnio: ${prev.weight}kg × ${prev.reps}` : 'Brak historii'
+            });
+          }
+          return { name: ex.name, sets: setsArr };
+        })
+      };
+      saveState();
+      switchTab('trening');
+    }
+
+    function renderActiveWorkout() {
+      const selectorCard = document.getElementById('workout-selector-card');
+      const sheet = document.getElementById('active-workout-sheet');
+      const container = document.getElementById('aw-exercises-container');
+
+      if (!state.activeWorkout) {
+        selectorCard.style.display = 'block';
+        sheet.style.display = 'none';
+        return;
+      }
+
+      selectorCard.style.display = 'none';
+      sheet.style.display = 'block';
+      document.getElementById('aw-title').textContent = state.activeWorkout.planName;
+
+      container.innerHTML = state.activeWorkout.exercises.map((ex, exIdx) => `
+        <div class="exercise-block">
+          <div class="row-flex" style="justify-content: space-between; margin-bottom: 6px;">
+            <strong style="font-size: 16px;">${ex.name}</strong>
+            <button class="btn btn-secondary btn-sm" onclick="addSetToActive(${exIdx})">+ Seria</button>
+          </div>
+          <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">
+            ${ex.sets[0]?.hint || ''}
+          </div>
+          ${ex.sets.map((s, sIdx) => `
+            <div class="set-row ${s.done ? 'done' : ''}">
+              <div class="set-num">#${sIdx + 1}</div>
+              <input type="number" step="0.5" placeholder="Ciężar (kg)" value="${s.weight}"
+                 oninput="updateActiveSet(${exIdx},${sIdx}, 'weight', this.value)">
+              <input type="number" placeholder="Powt." value="${s.reps}"
+                oninput="updateActiveSet(${exIdx},${sIdx}, 'reps', this.value)">
+              <button class="check-btn ${s.done ? 'checked' : ''}" onclick="toggleActiveSetDone(${exIdx},${sIdx})">✓</button>
+              <button class="btn btn-danger btn-sm" style="padding: 8px;" onclick="removeSetFromActive(${exIdx},${sIdx})">✕</button>
+            </div>
+          `).join('')}
+        </div>
+      `).join('');
+    }
+
+    function updateActiveSet(exIdx, sIdx, field, val) {
+      state.activeWorkout.exercises[exIdx].sets[sIdx][field] = val;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function toggleActiveSetDone(exIdx, sIdx) {
+      const setObj = state.activeWorkout.exercises[exIdx].sets[sIdx];
+      setObj.done = !setObj.done;
+      if (setObj.done) {
+        const customSec = parseInt(document.getElementById('custom-rest-sec').value, 10);
+        startRestTimer(customSec > 0 ? customSec : 90);
+      }
+      saveState();
+    }
+
+    function addSetToActive(exIdx) {
+      const sets = state.activeWorkout.exercises[exIdx].sets;
+      const last = sets[sets.length - 1] || { weight: '', reps: '' };
+      sets.push({ weight: last.weight, reps: last.reps, done: false, hint: '' });
+      saveState();
+    }
+
+    function removeSetFromActive(exIdx, sIdx) {
+      state.activeWorkout.exercises[exIdx].sets.splice(sIdx, 1);
+      saveState();
+    }
+
+    function addExerciseToActive() {
+      const inp = document.getElementById('aw-add-ex-name');
+      const name = inp.value.trim();
+      if (!name) return;
+      state.activeWorkout.exercises.push({
+        name,
+        sets: [{ weight: '', reps: '', done: false, hint: 'Dodatkowe ćwiczenie' }]
+      });
+      inp.value = '';
+      saveState();
+    }
+
+    function finishActiveWorkout() {
+      if (!state.activeWorkout) return;
+      const now = new Date();
+      const durMin = Math.max(1, Math.round((Date.now() - state.activeWorkout.startTimestamp) / 60000));
+
+      state.logs.push({
+        id: 'log_' + Date.now(),
+        date: state.activeWorkout.date,
+        startTime: state.activeWorkout.startTimeHM,
+        endTime: getTimeHM(now),
+        durationMin: durMin,
+        type: 'workout',
+        name: state.activeWorkout.planName,
+        exercises: state.activeWorkout.exercises,
+        distanceKm: '',
+        note: ''
+      });
+
+      state.activeWorkout = null;
+      state.restTimerEndTime = null;
+      saveState();
+      switchTab('kontrola');
+    }
+
+    function cancelActiveWorkout() {
+      if (!confirm('Anulować trwający trening bez zapisywania?')) return;
+      state.activeWorkout = null;
+      state.restTimerEndTime = null;
+      saveState();
+    }
+
+    /* ================= 7. ZARZĄDZANIE PLANAMI TRENINGOWYMI ================= */
+    function saveWorkoutPlan() {
+      const id = document.getElementById('edit-plan-id').value;
+      const name = document.getElementById('new-plan-name').value.trim();
+      const rawEx = document.getElementById('new-plan-exercises').value.trim();
+      if (!name || !rawEx) return alert('Podaj nazwę planu oraz ćwiczenia po przecinku.');
+
+      const exercises = rawEx.split(',').map(item => {
+        const clean = item.trim();
+        const match = clean.match(/^(.*?)\s+(\d+)\s*s$/i);
+        if (match) return { name: match[1].trim(), sets: parseInt(match[2], 10) };
+        return { name: clean, sets: 3 };
+      }).filter(e => e.name);
+
+      if (id) {
+        const idx = state.plans.findIndex(p => p.id === id);
+        if (idx > -1) state.plans[idx] = { id, name, exercises };
+      } else {
+        state.plans.push({ id: 'p_' + Date.now(), name, exercises });
+      }
+      resetPlanForm();
+      saveState();
+    }
+
+    function editWorkoutPlan(id) {
+      const plan = state.plans.find(p => p.id === id);
+      if (!plan) return;
+      document.getElementById('edit-plan-id').value = plan.id;
+      document.getElementById('new-plan-name').value = plan.name;
+      document.getElementById('new-plan-exercises').value = plan.exercises.map(e => `${e.name} ${e.sets}s`).join(', ');
+    }
+
+    function deleteWorkoutPlan(id) {
+      if (!confirm('Usunąć ten szablon treningu?')) return;
+      state.plans = state.plans.filter(p => p.id !== id);
+      saveState();
+    }
+
+    function resetPlanForm() {
+      document.getElementById('edit-plan-id').value = '';
+      document.getElementById('new-plan-name').value = '';
+      document.getElementById('new-plan-exercises').value = '';
+    }
+
+    /* ================= 8. ROZCIĄGANIE & INNE AKTYWNOŚCI ================= */
+    function quickLogStretch(routineTitle = 'Rozciąganie', targetDate = getTodayISO()) {
+      const now = new Date();
+      state.logs.push({
+        id: 'log_' + Date.now(),
+        date: targetDate,
+        startTime: getTimeHM(now),
+        endTime: getTimeHM(now),
+        durationMin: 15,
+        type: 'stretch',
+        name: routineTitle,
+        exercises: [],
+        distanceKm: '',
+        note: ''
+      });
+      saveState();
+    }
+
+    function addStretchRoutine() {
+      const title = document.getElementById('stretch-title-in').value.trim();
+      const url = document.getElementById('stretch-url-in').value.trim();
+      if (!title || !url) return;
+      state.stretchRoutines.push({ id: 'sr_' + Date.now(), title, url });
+      document.getElementById('stretch-title-in').value = '';
+      document.getElementById('stretch-url-in').value = '';
+      saveState();
+    }
+
+    function openAndLogStretch(id) {
+      const r = state.stretchRoutines.find(x => x.id === id);
+      if (!r) return;
+      quickLogStretch(r.title);
+      window.open(r.url, '_blank');
+    }
+
+    function deleteStretchRoutine(id) {
+      state.stretchRoutines = state.stretchRoutines.filter(x => x.id !== id);
+      saveState();
+    }
+
+    function addCustomCategory() {
+      const val = document.getElementById('custom-cat-in').value.trim();
+      if (!val) return;
+      if (!state.customCategories.includes(val)) {
+        state.customCategories.push(val);
+      }
+      document.getElementById('custom-cat-in').value = '';
+      saveState();
+    }
+
+    function saveOtherActivity() {
+      const cat = document.getElementById('oa-type').value;
+      const date = document.getElementById('oa-date').value || getTodayISO();
+      const dist = document.getElementById('oa-dist').value;
+      const dur = document.getElementById('oa-dur').value;
+      const note = document.getElementById('oa-note').value.trim();
+      const now = new Date();
+
+      state.logs.push({
+        id: 'log_' + Date.now(),
+        date,
+        startTime: getTimeHM(now),
+        endTime: getTimeHM(now),
+        durationMin: dur ? parseInt(dur, 10) : '',
+        type: 'other',
+        name: cat,
+        exercises: [],
+        distanceKm: dist ? parseFloat(dist) : '',
+        note
+      });
+
+      document.getElementById('oa-dist').value = '';
+      document.getElementById('oa-dur').value = '';
+      document.getElementById('oa-note').value = '';
+      saveState();
+      switchTab('kontrola');
+    }
+
+    function deleteLog(logId) {
+      // Single Source of Truth: usunięcie z tablicy logs natychmiast czyści kalendarz i statystyki
+      state.logs = state.logs.filter(l => l.id !== logId);
+      saveState();
+    }
+
+    /* ================= 9. KALENDARZ I LOGIKA REST DAY ================= */
+    function isRestDay(dateISO) {
+      const today = getTodayISO();
+      if (dateISO < state.appStartDate || dateISO > today) return false;
+      const hasLogs = state.logs.some(l => l.date === dateISO);
+      return !hasLogs;
+    }
+
+    function changeMonth(delta) {
+      calMonth += delta;
+      if (calMonth > 11) { calMonth = 0; calYear++; }
+      if (calMonth < 0) { calMonth = 11; calYear--; }
+      renderCalendar();
+    }
+
+    function selectCalendarDate(dateISO) {
+      selectedCalDate = dateISO;
+      renderCalendar();
+    }
+
+    function logStretchOnSelectedDate() {
+      quickLogStretch('Rozciąganie', selectedCalDate);
+    }
+
+    function updateAppStartDate() {
+      const val = document.getElementById('app-start-date-in').value;
+      if (val) {
+        state.appStartDate = val;
+        saveState();
+      }
+    }
+
+    function saveWeeklyPlanner() {
+      for (let d = 0; d < 7; d++) {
+        const planVal = document.getElementById(`wp-plan-${d}`).value.trim();
+        const timeVal = document.getElementById(`wp-time-${d}`).value;
+        state.weeklyPlanner[d] = { plan: planVal || 'Rest Day', time: timeVal || '' };
+      }
+      saveState();
+      alert('Planer tygodnia został zapisany.');
+    }
+
+    /* ================= 10. POMIARY CIAŁA I EKSPORT CSV / JSON ================= */
+    function saveHeight() {
+      const h = parseFloat(document.getElementById('prof-height').value);
+      if (h > 0) {
+        state.height = h;
+        saveState();
+      }
+    }
+
+    function saveQuickWeight() {
+      const w = parseFloat(document.getElementById('quick-weight-input').value);
+      if (!w || w <= 0) return;
+      state.measurements.push({
+        id: 'm_' + Date.now(),
+        date: getTodayISO(),
+        weight: w,
+        chest: '', waist: '', bicep: '', thigh: '', calf: ''
+      });
+      document.getElementById('quick-weight-input').value = '';
+      saveState();
+    }
+
+    function saveBodyMeasurement() {
+      const date = document.getElementById('meas-date').value || getTodayISO();
+      const weight = document.getElementById('m-weight').value;
+      const chest = document.getElementById('m-chest').value;
+      const waist = document.getElementById('m-waist').value;
+      const bicep = document.getElementById('m-bicep').value;
+      const thigh = document.getElementById('m-thigh').value;
+      const calf = document.getElementById('m-calf').value;
+
+      if (!weight && !chest && !waist && !bicep && !thigh && !calf) return;
+
+      state.measurements.push({
+        id: 'm_' + Date.now(),
+        date, weight, chest, waist, bicep, thigh, calf
+      });
+
+      ['m-weight','m-chest','m-waist','m-bicep','m-thigh','m-calf'].forEach(id => document.getElementById(id).value = '');
+      saveState();
+    }
+
+    function deleteMeasurement(id) {
+      state.measurements = state.measurements.filter(m => m.id !== id);
+      saveState();
+    }
+
+    function exportWorkoutsCSV() {
+      const headers = [
+        'Data', 'Dzien tygodnia', 'Godzina rozpoczecia', 'Godzina zakonczenia',
+        'Czas trwania (min)', 'Kategoria', 'Nazwa treningu / aktywnosci',
+        'Cwiczenie', 'Seria', 'Ciezar (kg)', 'Powtorzenia', 'Objetosc serii (kg)', 'Dystans (km)', 'Notatka'
+      ];
+      const rows = [headers.join(';')];
+
+      const sortedLogs = [...state.logs].sort((a, b) => a.date.localeCompare(b.date));
+      sortedLogs.forEach(l => {
+        const dObj = new Date(l.date + 'T12:00:00');
+        const dayName = DAYS_PL[dObj.getDay()];
+        const catLabel = l.type === 'workout' ? 'Trening silowy' : (l.type === 'stretch' ? 'Rozciaganie' : 'Inna aktywnosc');
+
+        if (l.type === 'workout' && l.exercises && l.exercises.length > 0) {
+          l.exercises.forEach(ex => {
+            ex.sets.forEach((s, idx) => {
+              const w = parseFloat(s.weight) || 0;
+              const r = parseInt(s.reps, 10) || 0;
+              const vol = w * r;
+              rows.push([
+                l.date, dayName, l.startTime || '', l.endTime || '',
+                l.durationMin || '', catLabel, l.name,
+                ex.name, idx + 1, String(w).replace('.', ','), r, String(vol).replace('.', ','), '', ''
+              ].join(';'));
+            });
+          });
+        } else {
+          rows.push([
+            l.date, dayName, l.startTime || '', l.endTime || '',
+            l.durationMin || '', catLabel, l.name,
+            '-', '-', '-', '-', '-', l.distanceKm ? String(l.distanceKm).replace('.', ',') : '', l.note || ''
+          ].join(';'));
+        }
+      });
+
+      const blob = new Blob(['\uFEFF' + rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `TRENING_Baza_Aktywnosci_${getTodayISO()}.csv`;
+      a.click();
+    }
+
+    function exportMeasurementsCSV() {
+      const headers = ['Data', 'Wzrost (cm)', 'Waga (kg)', 'Klatka (cm)', 'Pas/Talia (cm)', 'Biceps (cm)', 'Udo (cm)', 'Lydka (cm)'];
+      const rows = [headers.join(';')];
+      state.measurements.forEach(m => {
+        rows.push([
+          m.date, state.height || '',
+          String(m.weight || '').replace('.', ','),
+          String(m.chest || '').replace('.', ','),
+          String(m.waist || '').replace('.', ','),
+          String(m.bicep || '').replace('.', ','),
+          String(m.thigh || '').replace('.', ','),
+          String(m.calf || '').replace('.', ',')
+        ].join(';'));
+      });
+      const blob = new Blob(['\uFEFF' + rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `TRENING_Pomiary_Ciala_${getTodayISO()}.csv`;
+      a.click();
+    }
+
+    function exportFullJSON() {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `TRENING_Backup_${getTodayISO()}.json`;
+      a.click();
+    }
+
+    function importFullJSON(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const imported = JSON.parse(ev.target.result);
+          state = Object.assign(JSON.parse(JSON.stringify(defaultState)), imported);
+          saveState();
+          alert('Kopia zapasowa wczytana pomyślnie!');
+        } catch (err) {
+          alert('Błąd pliku JSON.');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    /* ================= 11. RENDEROWANIE INTERFEJSU ================= */
+    function renderDashboard() {
+      const todayISO = getTodayISO();
+      const now = new Date();
+      document.getElementById('header-date').textContent = `${DAYS_PL[now.getDay()]}, ${todayISO}`;
+
+      // Założenia na dziś z Planera
+      const todayPlan = state.weeklyPlanner[now.getDay()] || { plan: 'Rest Day', time: '' };
+      document.getElementById('today-plan-title').textContent = todayPlan.plan;
+      document.getElementById('today-plan-sub').textContent = todayPlan.time
+        ? `Zaplanowana godzina: ${todayPlan.time}`
+        : 'Brak ustawionej godziny przypomnienia';
+
+      const todayLogs = state.logs.filter(l => l.date === todayISO);
+      const statusBadge = document.getElementById('today-status-badge');
+      if (todayLogs.length > 0) {
+        statusBadge.textContent = `Wykonano (${todayLogs.length})`;
+        statusBadge.className = 'badge badge-stretch';
+      } else {
+        statusBadge.textContent = 'Domyślnie: Rest Day';
+        statusBadge.className = 'badge badge-rest';
+      }
+
+      // Status rozciągania dzisiaj
+      const stretchedToday = todayLogs.some(l => l.type === 'stretch');
+      const stText = document.getElementById('stretch-status-text');
+      stText.textContent = stretchedToday ? 'Zrobione dzisiaj ✓' : 'Jeszcze nieodhaczone';
+      stText.style.color = stretchedToday ? 'var(--green)' : 'var(--text-main)';
+
+      // Pasek tygodnia (Poniedziałek - Niedziela)
+      const strip = document.getElementById('week-strip');
+      const curr = new Date();
+      const dayOfWeek = (curr.getDay() + 6) % 7; // 0 = Poniedziałek
+      const monday = new Date(curr);
+      monday.setDate(curr.getDate() - dayOfWeek);
+
+      let stripHTML = '';
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(monday);
+        d.setDate(monday.getDate() + i);
+        const offset = d.getTimezoneOffset() * 60000;
+        const dISO = new Date(d - offset).toISOString().split('T')[0];
+        const dLogs = state.logs.filter(l => l.date === dISO);
+        const rest = isRestDay(dISO);
+
+        let dotsHTML = '';
+        if (dLogs.some(l => l.type === 'workout')) dotsHTML += '<span class="dot dot-workout"></span>';
+        if (dLogs.some(l => l.type === 'stretch')) dotsHTML += '<span class="dot dot-stretch"></span>';
+        if (dLogs.some(l => l.type === 'other')) dotsHTML += '<span class="dot dot-other"></span>';
+        if (rest) dotsHTML += '<span class="dot dot-rest"></span>';
+
+        stripHTML += `
+          <div class="week-day ${dISO === todayISO ? 'is-today' : ''}" onclick="switchTab('kalendarz'); selectCalendarDate('${dISO}')" style="cursor:pointer;">
+            <div class="d-name">${DAYS_SHORT[i]}</div>
+            <div class="d-num">${d.getDate()}</div>
+            <div class="dots">${dotsHTML}</div>
+          </div>
+        `;
+      }
+      strip.innerHTML = stripHTML;
+
+      // Waga i BMI na Dashboardzie
+      const withWeight = state.measurements.filter(m => m.weight);
+      if (withWeight.length > 0) {
+        const latest = withWeight[withWeight.length - 1];
+        document.getElementById('dashboard-weight').textContent = `${latest.weight} kg`;
+        if (state.height) {
+          const bmi = (latest.weight / Math.pow(state.height / 100, 2)).toFixed(1);
+          document.getElementById('dashboard-bmi').textContent = `Pomiar z ${latest.date} • BMI: ${bmi}`;
+        }
+      } else {
+        document.getElementById('dashboard-weight').textContent = '-- kg';
+      }
+
+      // Dzisiejsze aktywności
+      const todayList = document.getElementById('today-logs-list');
+      if (todayLogs.length === 0) {
+        todayList.innerHTML = `<p style="font-size: 13px; color: var(--text-muted);">Brak zapisanych aktywności na dziś (stan domyślny: Rest Day).</p>`;
+      } else {
+        todayList.innerHTML = todayLogs.map(l => formatLogItemHTML(l)).join('');
+      }
+    }
+
+    function formatLogItemHTML(l) {
+      let badgeClass = 'badge-workout';
+      let typeLabel = 'Trening';
+      if (l.type === 'stretch') { badgeClass = 'badge-stretch'; typeLabel = 'Rozciąganie'; }
+      if (l.type === 'other') { badgeClass = 'badge-other'; typeLabel = 'Aktywność'; }
+
+      const meta = [];
+      if (l.startTime) meta.push(`${l.startTime}${l.endTime ? ' - ' + l.endTime : ''}`);
+      if (l.durationMin) meta.push(`${l.durationMin} min`);
+      if (l.distanceKm) meta.push(`${l.distanceKm} km`);
+      if (l.exercises && l.exercises.length > 0) meta.push(`${l.exercises.length} ćwicz.`);
+
+      return `
+        <div class="list-item">
+          <div>
+            <span class="badge ${badgeClass}" style="margin-right:6px;">${typeLabel}</span>
+            <strong>${l.name}</strong>
+            <div style="font-size: 12px; color: var(--text-muted); margin-top: 3px;">
+              ${meta.join(' • ')} ${l.note ? ' — ' + l.note : ''}
+            </div>
+          </div>
+          <button class="btn btn-danger btn-sm" onclick="deleteLog('${l.id}')">Usuń</button>
+        </div>
+      `;
+    }
+
+    function renderWorkoutTab() {
+      // Lista planów
+      const plansEl = document.getElementById('plans-list');
+      plansEl.innerHTML = state.plans.map(p => `
+        <div class="list-item">
+          <div>
+            <strong style="font-size: 15px;">${p.name}</strong>
+            <div style="font-size: 12px; color: var(--text-muted);">
+              ${p.exercises.map(e => `${e.name} (${e.sets}s)`).join(', ')}
+            </div>
+          </div>
+          <div class="row-flex">
+            <button class="btn btn-primary btn-sm" onclick="startWorkoutFromPlan('${p.id}')">Start</button>
+            <button class="btn btn-secondary btn-sm" onclick="editWorkoutPlan('${p.id}')">Edytuj</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteWorkoutPlan('${p.id}')">✕</button>
+          </div>
+        </div>
+      `).join('');
+
+      renderActiveWorkout();
+
+      // Lista rutyn Follow-Along
+      const stretchEl = document.getElementById('stretch-links-list');
+      stretchEl.innerHTML = state.stretchRoutines.map(r => `
+        <div class="list-item">
+          <div style="overflow:hidden;">
+            <strong style="font-size: 14px; display:block;">${r.title}</strong>
+            <a href="${r.url}" target="_blank" style="font-size: 11px; color: var(--accent); text-decoration:none;">${r.url}</a>
+          </div>
+          <div class="row-flex">
+            <button class="btn btn-success btn-sm" onclick="openAndLogStretch('${r.id}')">▶ Otwórz i Zalicz</button>
+            <button class="btn btn-danger btn-sm" onclick="deleteStretchRoutine('${r.id}')">✕</button>
+          </div>
+        </div>
+      `).join('');
+
+      // Kategorie innych aktywności
+      const oaSelect = document.getElementById('oa-type');
+      oaSelect.innerHTML = state.customCategories.map(c => `<option value="${c}">${c}</option>`).join('');
+      if (!document.getElementById('oa-date').value) {
+        document.getElementById('oa-date').value = getTodayISO();
+      }
+    }
+
+    function renderCalendar() {
+      const monthNames = ['Styczeń','Luty','Marzec','Kwiecień','Maj','Czerwiec','Lipiec','Sierpień','Wrzesień','Październik','Listopad','Grudzień'];
+      document.getElementById('cal-month-title').textContent = `${monthNames[calMonth]} ${calYear}`;
+
+      const firstDay = new Date(calYear, calMonth, 1);
+      const lastDay = new Date(calYear, calMonth + 1, 0);
+      const startOffset = (firstDay.getDay() + 6) % 7; // Poniedziałek = 0
+      const daysInMonth = lastDay.getDate();
+
+      let html = '';
+      for (let i = 0; i < startOffset; i++) {
+        html += `<div class="cal-cell outside"></div>`;
+      }
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const mStr = String(calMonth + 1).padStart(2, '0');
+        const dStr = String(d).padStart(2, '0');
+        const dateISO = `${calYear}-${mStr}-${dStr}`;
+        const dayLogs = state.logs.filter(l => l.date === dateISO);
+        const rest = isRestDay(dateISO);
+
+        let dots = '';
+        if (dayLogs.some(l => l.type === 'workout')) dots += '<span class="dot dot-workout"></span>';
+        if (dayLogs.some(l => l.type === 'stretch')) dots += '<span class="dot dot-stretch"></span>';
+        if (dayLogs.some(l => l.type === 'other')) dots += '<span class="dot dot-other"></span>';
+
+        let restBadge = '';
+        if (rest) {
+          restBadge = `<span class="cal-badge" style="background:var(--bg-card); color:var(--text-muted);">Rest</span>`;
+        }
+
+        html += `
+          <div class="cal-cell ${dateISO === selectedCalDate ? 'selected' : ''}" onclick="selectCalendarDate('${dateISO}')">
+            <div class="c-num">${d}</div>
+            <div class="dots">${dots}</div>
+            ${restBadge}
+          </div>
+        `;
+      }
+      document.getElementById('cal-days').innerHTML = html;
+
+      // Szczegóły wybranego dnia
+      document.getElementById('selected-date-label').textContent = selectedCalDate;
+      const selLogs = state.logs.filter(l => l.date === selectedCalDate);
+      const selContainer = document.getElementById('selected-date-logs');
+
+      if (selLogs.length > 0) {
+        selContainer.innerHTML = selLogs.map(l => formatLogItemHTML(l)).join('');
+      } else if (isRestDay(selectedCalDate)) {
+        selContainer.innerHTML = `<div class="list-item"><span class="badge badge-rest">REST DAY</span><span style="font-size:13px; color:var(--text-muted);">Dzień regeneracji (brak zapisanych treningów).</span></div>`;
+      } else {
+        selContainer.innerHTML = `<p style="font-size:13px; color:var(--text-muted);">Brak wpisów w tym dniu.</p>`;
+      }
+
+      // Planer Tygodnia
+      const order = [1, 2, 3, 4, 5, 6, 0];
+      const wpContainer = document.getElementById('weekly-planner-rows');
+      wpContainer.innerHTML = order.map(dIdx => {
+        const item = state.weeklyPlanner[dIdx] || { plan: '', time: '' };
+        return `
+          <div class="row-flex" style="margin-bottom: 8px;">
+            <div style="width: 105px; font-size: 13px; font-weight: 700;">${DAYS_PL[dIdx]}</div>
+            <input type="text" id="wp-plan-${dIdx}" value="${item.plan}" placeholder="Założenie (np. Trening A)">
+            <input type="time" id="wp-time-${dIdx}" value="${item.time}" style="width: 115px;">
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('app-start-date-in').value = state.appStartDate;
+      updateNotifButton();
+    }
+
+    function renderProfile() {
+      document.getElementById('prof-height').value = state.height || '';
+      if (!document.getElementById('meas-date').value) {
+        document.getElementById('meas-date').value = getTodayISO();
+      }
+
+      const histEl = document.getElementById('measurements-history-list');
+      if (state.measurements.length === 0) {
+        histEl.innerHTML = `<p style="font-size: 13px; color: var(--text-muted);">Brak zapisanych pomiarów.</p>`;
+        return;
+      }
+
+      const sorted = [...state.measurements].reverse();
+      histEl.innerHTML = sorted.map(m => {
+        const parts = [];
+        if (m.weight) parts.push(`Waga: <strong>${m.weight} kg</strong>`);
+        if (m.chest) parts.push(`Klatka: ${m.chest} cm`);
+        if (m.waist) parts.push(`Pas: ${m.waist} cm`);
+        if (m.bicep) parts.push(`Biceps: ${m.bicep} cm`);
+        if (m.thigh) parts.push(`Udo: ${m.thigh} cm`);
+        if (m.calf) parts.push(`Łydka: ${m.calf} cm`);
+
+        return `
+          <div class="list-item">
+            <div>
+              <div style="font-size: 12px; color: var(--text-muted); font-weight: 700;">${m.date}</div>
+              <div style="font-size: 13px; margin-top: 2px;">${parts.join(' • ')}</div>
+            </div>
+            <button class="btn btn-danger btn-sm" onclick="deleteMeasurement('${m.id}')">Usuń</button>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderAll() {
+      renderDashboard();
+      renderWorkoutTab();
+      renderCalendar();
+      renderProfile();
+      updateTimersUI();
+    }
+
+    // Inicjalizacja przy starcie
+    initPWAAssets();
+    applyTheme();
+    renderAll();
+  </script>
+</body>
+</html>
